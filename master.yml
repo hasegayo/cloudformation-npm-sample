@@ -1,0 +1,39 @@
+Description:
+  Infrastructure as Code for Sample resources
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Description: Environment name - [dev, prod]
+    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+    ConstraintDescription: Specify either dev or prod
+
+Conditions:
+  # 開発/本番 を判別する用
+  IsProd: !Equals [ !Ref EnvironmentName, prod ]
+
+Resources:
+  # リソースは大まかな機能分類ごとに ./templates に定義し、ココで読み込む
+
+  Networks:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: ./templates/networks.yml
+      Parameters:
+        EnvironmentName: !Ref AWS::StackName
+        VpcCIDR: 10.180.0.0/16
+#
+#  SecurityGroups:
+#    Type: AWS::CloudFormation::Stack
+#    Properties:
+#      TemplateURL: ./templates/security-groups.yml
+#      Parameters:
+#        EnvironmentName: !Ref AWS::StackName
+#        VPC: !GetAtt Networks.Outputs.VPC
+
+#Outputs:
+#  ServiceUrl:
+#    Description: The URL endpoint for the product service

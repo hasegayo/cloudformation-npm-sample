@@ -1,0 +1,10 @@
+{
+  "name": "sample-cloudformation",
+  "version": "1.0.0",
+  "scripts": {
+    "deploy:dev": "npm run create-s3-bucket && npm run package-template && npm run deploy-template:dev",
+    "create-s3-bucket": "aws s3 ls s3://sample-cloudformation-template 2>/dev/null || aws s3 mb s3://sample-cloudformation-template",
+    "package-template": "aws cloudformation package --template-file master.yml --s3-bucket sample-cloudformation-template --output-template-file packaged-master.yml",
+    "deploy-template:dev": "aws cloudformation deploy --template-file packaged-master.yml --stack-name Sample-Dev --parameter-overrides EnvironmentName=dev"
+  }
+}
